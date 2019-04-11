@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using BackendDima.BLL.Implementation;
 
 namespace BackendDima
 {
@@ -39,9 +41,11 @@ namespace BackendDima
                 opt.UseSqlServer(Configuration
                     .GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddIdentity<DbUser, IdentityRole>()
-                .AddEntityFrameworkStores<EFContext>();
+                .AddEntityFrameworkStores<EFContext>()
+                .AddDefaultTokenProviders(); 
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));
 
